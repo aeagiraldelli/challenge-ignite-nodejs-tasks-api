@@ -23,7 +23,7 @@ export class Database {
   }
 
   selectById(table, id) {
-    if (this.#database[table]) {
+    if (this.#database[table] && this.#database[table].length > 0) {
       const task = this.#database[table].find(
         (row) => Number(row.id) === Number(id)
       );
@@ -86,7 +86,7 @@ export class Database {
   }
 
   delete(table, id) {
-    if (this.#database[table]) {
+    if (this.#database[table] && this.#database[table].length > 0) {
       const rowIndex = this.#database[table].findIndex(
         (row) => Number(row.id) === Number(id)
       );

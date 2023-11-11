@@ -41,6 +41,24 @@ export const routes = [
     handler: (req, res) => {
       if (req.body) {
         const { title, description } = req.body;
+        if (!title) {
+          return res.writeHead(400).end(
+            JSON.stringify({
+              status: 'error',
+              message: 'title can not be empty.',
+            })
+          );
+        }
+
+        if (!description) {
+          return res.writeHead(400).end(
+            JSON.stringify({
+              status: 'error',
+              message: 'description can not be empty.',
+            })
+          );
+        }
+
         const task = { title, description };
         db.insert(TASK_TABLE, task);
         return res.writeHead(201).end();
@@ -53,6 +71,25 @@ export const routes = [
     handler: (req, res) => {
       const { id } = req.params;
       const { title, description } = req.body;
+
+      if (!title) {
+        return res.writeHead(400).end(
+          JSON.stringify({
+            status: 'error',
+            message: 'title can not be empty.',
+          })
+        );
+      }
+
+      if (!description) {
+        return res.writeHead(400).end(
+          JSON.stringify({
+            status: 'error',
+            message: 'description can not be empty.',
+          })
+        );
+      }
+
       db.update(TASK_TABLE, id, { title, description });
       return res.writeHead(204).end();
     },
@@ -62,8 +99,26 @@ export const routes = [
     path: buildRoutePath('/tasks/:id'),
     handler: (req, res) => {
       const { id } = req.params;
-      db.delete(TASK_TABLE, id);
-      return res.writeHead(204).end();
+      console.log(id);
+      if (id) {
+        const task = db.selectById(TASK_TABLE, id);
+        if (task && task.id) {
+          db.delete(TASK_TABLE, id);
+          return res.writeHead(204).end();
+        } else {
+          return res
+            .writeHead(404)
+            .end(
+              JSON.stringify({ status: 'error', message: 'task not found.' })
+            );
+        }
+      } else {
+        return res
+          .writeHead(400)
+          .end(
+            JSON.stringify({ status: 'error', message: 'id can not be empty' })
+          );
+      }
     },
   },
   {
@@ -76,7 +131,9 @@ export const routes = [
         db.completeTask(TASK_TABLE, id);
         res.writeHead(204).end();
       } else {
-        res.writeHead(400).end();
+        res
+          .writeHead(400)
+          .end(JSON.stringify({ status: 'error', message: 'task not found.' }));
       }
     },
   },
