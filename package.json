@@ -1,0 +1,16 @@
+{
+  "name": "challenge-ignite-nodejs-tasks-api",
+  "type": "module",
+  "version": "0.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon src/server.js"
+  },
+  "keywords": [],
+  "author": "Ademir Giraldelli",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
